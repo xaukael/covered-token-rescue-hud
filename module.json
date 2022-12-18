@@ -1,0 +1,14 @@
+{
+    "id": "covered-token-rescue-hud",
+    "title": "Covered Token Rescue HUD",
+    "description": "On hovering a token with tokens under it, shows images of tokens to allow you to select them",
+    "author": "Xaukael",
+    "version": "1.0.0",
+    "minimumCoreVersion": "10",
+    "compatibleCoreVersion": "10",
+    "scripts": ["covered-token-rescue-hud.js"],
+    "dependencies": [],
+    "url": "https://github.com/xaukael/covered-token-rescue-hud/",
+    "manifest": "https://github.com/xaukael/journal-directory-pages/raw/main/module.json",
+    "download": "https://github.com/xaukael/journal-directory-pages/raw/main/covered-token-rescue-hud.zip"
+}
