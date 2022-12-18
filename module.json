@@ -9,6 +9,6 @@
     "scripts": ["covered-token-rescue-hud.js"],
     "dependencies": [],
     "url": "https://github.com/xaukael/covered-token-rescue-hud/",
-    "manifest": "https://github.com/xaukael/journal-directory-pages/raw/main/module.json",
-    "download": "https://github.com/xaukael/journal-directory-pages/raw/main/covered-token-rescue-hud.zip"
+    "manifest": "https://github.com/xaukael/covered-token-rescue-hud/raw/main/module.json",
+    "download": "https://github.com/xaukael/covered-token-rescue-hud/raw/main/covered-token-rescue-hud.zip"
 }
