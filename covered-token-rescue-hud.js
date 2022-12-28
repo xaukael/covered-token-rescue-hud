@@ -51,8 +51,11 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
   } 
   </style></div>`);
   $div.append($(
-    covered.reduce((a,t)=>a+=`<a class="token" data-id="${t.id}"><img src="${t.document.texture.src}" width="${canvas.grid.size/3}" height="${canvas.grid.size/3}" ${t.controlled?'style="border: 1px solid orange;"':''}></a>`,`<center class="overlapping">`) +`</center>`
-  ));
+    covered.reduce((a,t)=>{
+    if (t.document.texture.src.includes('.webm')) a+=`<a class="token" data-id="${t.id}"><video width="${canvas.grid.size/3}" height="${canvas.grid.size/3}" ${t.controlled?'style="border: 1px solid orange;"':''}><source src="${t.document.texture.src}" type="video/webm"> </video></a>`
+    else a+=`<a class="token" data-id="${t.id}"><img src="${t.document.texture.src}" width="${canvas.grid.size/3}" height="${canvas.grid.size/3}" ${t.controlled?'style="border: 1px solid orange;"':''}></a>`
+    return a;
+  },`<center class="overlapping">`) +`</center>`));
   $div.find('a.token').click(function(e){
     let t = canvas.tokens.get(this.dataset.id)
     t.control({releaseOthers:!e.shiftKey})

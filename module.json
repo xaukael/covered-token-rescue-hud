@@ -3,7 +3,7 @@
     "title": "Covered Token Rescue HUD",
     "description": "On hovering a token with tokens under it, shows images of tokens to allow you to select them",
     "author": "Xaukael",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "minimumCoreVersion": "10",
     "compatibleCoreVersion": "10",
     "scripts": ["covered-token-rescue-hud.js"],
