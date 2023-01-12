@@ -1,6 +1,6 @@
 Hooks.on('updateOverlapHUD', async (token, hover)=>{
-  if (!hover && !$(`#${token.id}-overlapping-div`).is(":hover")) return  $(`div.token-overlapping-div`).remove(); 
- 
+  if (!hover && !$(`#${token.id}-overlapping-div`).length) return $(`div.token-overlapping-div`).remove(); 
+  //??:hover
   function doOverlap( l1, r1 ,  l2 ,  r2 ) {
     if (l1.x == r1.x || l1.y == r1.y || l2.x == r2.x || l2.y == r2.y)  return false;
     if (l1.x >= r2.x || l2.x >= r1.x) return false;
