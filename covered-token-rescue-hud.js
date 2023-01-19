@@ -28,10 +28,10 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
   
   if (!covered.length) return $(`div.token-overlapping-div`).remove(); 
   if (hover) $(`div.token-overlapping-div`).remove(); 
-  let $div = $(`<div id="${token.id}-overlapping-div" class="token-overlapping-div ${token.id}" style="position: absolute; top: ${token.y+token.h}px; left: ${token.x}px; width: ${token.w}px; display:block;" data-tokenid="${token.id}">
+  if (!token.owner) return;
+  let $div = $(`<div id="${token.id}-overlapping-div" class="token-overlapping-div ${token.id}" title="${token.name}" style="position: absolute; top: ${token.y+token.h}px; left: ${token.x}px; width: ${token.w}px; display:block;" data-tokenid="${token.id}">
   <style>
   .token-overlapping-div {
-    cursor: ${!token.owner?'crosshair':'grab'};
     font-size: ${canvas.grid.size/6}px;
     pointer-events: all;
   }
