@@ -20,16 +20,16 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
     if (t.id==c.id) continue;
       let topLeft2 = { x: t.x , y: t.y };
       let bottomRight2 = { x: t.x + t.w , y: t.y + t.w };
-      if (topLeft1.x <= topLeft2.x && topLeft1.y <= topLeft2.y && bottomRight1.x >= bottomRight2.x && bottomRight1.y >= bottomRight2.y) 
+      if (topLeft1.x <= topLeft2.x && topLeft1.y <= topLeft2.y && bottomRight1.x >= bottomRight2.x && bottomRight1.y >= bottomRight2.y && t.owner) 
         covered.push(t);
   }
-
+  
 
   
   if (!covered.length) return $(`div.token-overlapping-div`).remove(); 
   if (hover) $(`div.token-overlapping-div`).remove(); 
-  if (!token.owner) return;
-  let $div = $(`<div id="${token.id}-overlapping-div" class="token-overlapping-div ${token.id}" title="${token.name}" style="position: absolute; top: ${token.y+token.h}px; left: ${token.x}px; width: ${token.w}px; display:block;" data-tokenid="${token.id}">
+  
+  let $div = $(`<div id="${token.id}-overlapping-div" class="token-overlapping-div ${token.id}" style="position: absolute; top: ${token.y+token.h}px; left: ${token.x}px; width: ${token.w}px; display:block;" data-tokenid="${token.id}">
   <style>
   .token-overlapping-div {
     font-size: ${canvas.grid.size/6}px;
@@ -52,8 +52,8 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
   </style></div>`);
   $div.append($(
     covered.reduce((a,t)=>{
-    if (t.document.texture.src.includes('.webm')) a+=`<a class="token" data-id="${t.id}"><video width="${canvas.grid.size/3}" height="${canvas.grid.size/3}" ${t.controlled?'style="border: 1px solid orange;"':''}><source src="${t.document.texture.src}" type="video/webm"> </video></a>`
-    else a+=`<a class="token" data-id="${t.id}"><img src="${t.document.texture.src}" width="${canvas.grid.size/3}" height="${canvas.grid.size/3}" ${t.controlled?'style="border: 1px solid orange;"':''}></a>`
+    if (t.document.texture.src.includes('.webm')) a+=`<a class="token" data-id="${t.id}" title="${t.name}" ><video width="${canvas.grid.size/3}" height="${canvas.grid.size/3}" ${t.controlled?'style="border: 1px solid orange;"':''}><source src="${t.document.texture.src}" type="video/webm"> </video></a>`
+    else a+=`<a class="token" data-id="${t.id}" title="${t.name}" ><img src="${t.document.texture.src}" width="${canvas.grid.size/3}" height="${canvas.grid.size/3}" ${t.controlled?'style="border: 1px solid orange;"':''}></a>`
     return a;
   },`<center class="overlapping">`) +`</center>`));
   $div.find('a.token').click(function(e){
