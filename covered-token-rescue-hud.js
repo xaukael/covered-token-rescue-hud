@@ -67,7 +67,7 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
       else $(this).find('img').css('border', '1px solid rgba(0,0,0,0)')
     });
   })
-  $div.find('a.token').contextmenu(function(e){
+  .contextmenu(function(e){
     let t = canvas.tokens.get(this.dataset.id)
     if (!t.isOwner) return; 
     if ( canvas.tokens.hud.object === t) return canvas.tokens.hud.clear();
@@ -76,6 +76,15 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
         return canvas.tokens.hud.bind(t);
       }
   })
+  .mouseover(function(e){
+    let tok = canvas.tokens?.get($(this).data().id);
+    let $div = $(`<div id="${tok.id}-marker" class="token-marker ${tok.id}" style="position: absolute; top: ${tok.y-2}px; left: ${tok.x-2}px; display:block;
+    width: ${tok.w+4}px; height: ${tok.h+4}px;  border: 2px solid red; border-radius: 3px;" data-tokenid="${tok.id}"></div>`);
+      $('#hud').append($div);
+  })
+  .mouseout(function(e) {
+    $('#hud').find('div.token-marker').remove();
+  });
   $div.find('center').mouseleave(function(){$(this).remove();})
   $(`#hud`).append($div);
 })
@@ -83,6 +92,7 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
 Hooks.on('updateToken', (token, updates)=> {
   if (!updates.x && !updates.y) return;
   Hooks.callAll('updateOverlapHUD', token, token.hover)
+  $('#hud').find('div.token-marker').remove();
 })
 
 Hooks.on('hoverToken', (token, hover)=> {
@@ -92,4 +102,5 @@ Hooks.on('hoverToken', (token, hover)=> {
 
 Hooks.on('renderTokenHUD', (app, html, hudData)=>{
   $(`div.token-overlapping-div`).remove(); 
+  $('#hud').find('div.token-marker').remove();
 });
