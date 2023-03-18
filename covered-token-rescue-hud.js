@@ -1,16 +1,12 @@
 Hooks.on('updateOverlapHUD', async (token, hover)=>{
-  if (!hover && !$(`#${token.id}-overlapping-div`).length) return $(`div.token-overlapping-div`).remove(); 
+  //console.log(!hover , !$(`#${token.id}-overlapping-div`).length)
+  if (!hover && !$(`#${token.id}-overlapping-div:hover`).length) return $(`div.token-overlapping-div`).remove(); 
   //??:hover
   function doOverlap( l1, r1 ,  l2 ,  r2 ) {
     if (l1.x == r1.x || l1.y == r1.y || l2.x == r2.x || l2.y == r2.y)  return false;
     if (l1.x >= r2.x || l2.x >= r1.x) return false;
     if (r1.y <= l2.y || r2.y <= l1.y)  return false;
     return true;
-  }
-  //if (doesCover( topLeft1,  r1,  l2,  r2) )
-  function doesCover( topLeft1, bottomRight1 ,  topLeft2 ,  bottomRight2 ) {
-     return true;
-    return false;
   }
   let c = token
   let topLeft1 = { x: c.x ,  y: c.y };
@@ -20,11 +16,11 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
     if (t.id==c.id) continue;
       let topLeft2 = { x: t.x , y: t.y };
       let bottomRight2 = { x: t.x + t.w , y: t.y + t.w };
-      if (topLeft1.x <= topLeft2.x && topLeft1.y <= topLeft2.y && bottomRight1.x >= bottomRight2.x && bottomRight1.y >= bottomRight2.y && t.owner) 
+      if (canvas.grid.type <= 1 && topLeft1.x <= topLeft2.x && topLeft1.y <= topLeft2.y && bottomRight1.x >= bottomRight2.x && bottomRight1.y >= bottomRight2.y && t.owner) 
+        covered.push(t);
+      if (canvas.grid.type > 1 && doOverlap(topLeft1, bottomRight1, topLeft2, bottomRight2))
         covered.push(t);
   }
-  
-
   
   if (!covered.length) return $(`div.token-overlapping-div`).remove(); 
   if (hover) $(`div.token-overlapping-div`).remove(); 
@@ -52,8 +48,8 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
   </style></div>`);
   $div.append($(
     covered.reduce((a,t)=>{
-    if (t.document.texture.src.includes('.webm')) a+=`<a class="token" data-id="${t.id}" title="${t.name}" ><video width="${canvas.grid.size/3}" height="${canvas.grid.size/3}" ${t.controlled?'style="border: 1px solid orange;"':''}><source src="${t.document.texture.src}" type="video/webm"> </video></a>`
-    else a+=`<a class="token" data-id="${t.id}" title="${t.name}" ><img src="${t.document.texture.src}" width="${canvas.grid.size/3}" height="${canvas.grid.size/3}" ${t.controlled?'style="border: 1px solid orange;"':''}></a>`
+    if (t.document.texture.src.includes('.webm')) a+=`<a class="token" data-id="${t.id}" data-tooltip="${t.owner?t.name:''}" ><video width="${canvas.grid.size/3}" height="${canvas.grid.size/3}" ${t.controlled?'style="border: 1px solid orange;"':''}><source src="${t.document.texture.src}" type="video/webm"> </video></a>`
+    else a+=`<a class="token" data-id="${t.id}" data-tooltip="${t.owner?t.name:''}" ><img src="${t.document.texture.src}" width="${canvas.grid.size/3}" height="${canvas.grid.size/3}" ${t.controlled?'style="border: 1px solid orange;"':''}></a>`
     return a;
   },`<center class="overlapping">`) +`</center>`));
   $div.find('a.token').click(function(e){
@@ -62,14 +58,14 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
     
     $(this).parent().find('a').each(function(){
       let t = canvas.tokens.get($(this).data().id)
-      if (!t.isOwner) return; 
+      //if (!t.isOwner) return; 
       if (t.controlled) $(this).find('img').css('border', '1px solid orange')
       else $(this).find('img').css('border', '1px solid rgba(0,0,0,0)')
     });
   })
   .contextmenu(function(e){
     let t = canvas.tokens.get(this.dataset.id)
-    if (!t.isOwner) return; 
+    //if (!t.isOwner) return; 
     if ( canvas.tokens.hud.object === t) return canvas.tokens.hud.clear();
       else {
         t.control({releaseOthers: !e.shiftKey});
