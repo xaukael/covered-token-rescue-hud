@@ -1,6 +1,7 @@
 Hooks.on('updateOverlapHUD', async (token, hover)=>{
-  //console.log(!hover , !$(`#${token.id}-overlapping-div`).length)
-  if (!hover && !$(`#${token.id}-overlapping-div:hover`).length) return $(`div.token-overlapping-div`).remove(); 
+  
+  //console.log(!hover ,$(`#${token.id}-overlapping-div > center.hover`))
+  //if (!hover && !$(`#${token.id}-overlapping-div > center.hover`).length) return $(`#hud > div.token-overlapping-div`).remove(); 
   //??:hover
   function doOverlap( l1, r1 ,  l2 ,  r2 ) {
     if (l1.x == r1.x || l1.y == r1.y || l2.x == r2.x || l2.y == r2.y)  return false;
@@ -22,10 +23,10 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
         covered.push(t);
   }
   
-  if (!covered.length) return $(`div.token-overlapping-div`).remove(); 
+  if (!covered.length) return $(`#hud > div.token-overlapping-div`).remove(); 
   if (hover) $(`div.token-overlapping-div`).remove(); 
   
-  let $div = $(`<div id="${token.id}-overlapping-div" class="token-overlapping-div ${token.id}" style="position: absolute; top: ${token.y+token.h}px; left: ${token.x}px; width: ${token.w}px; display:block;" data-tokenid="${token.id}">
+  let $div = $(`<div id="${token.id}-overlapping-div" class="token-overlapping-div ${token.id}" style="position: absolute; top: ${token.y+token.h}px; left: ${token.x}px; width: ${token.w}px; display:block; pointer-events:all;" data-tokenid="${token.id}">
   <style>
   .token-overlapping-div {
     font-size: ${canvas.grid.size/6}px;
@@ -52,7 +53,8 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
     else a+=`<a class="token" data-id="${t.id}" data-tooltip="${t.owner?t.name:''}" ><img src="${t.document.texture.src}" width="${canvas.grid.size/3}" height="${canvas.grid.size/3}" ${t.controlled?'style="border: 1px solid orange;"':''}></a>`
     return a;
   },`<center class="overlapping">`) +`</center>`));
-  $div.find('a.token').click(function(e){
+  $div.find('a.token').on ({
+    click:function(e){
     let t = canvas.tokens.get(this.dataset.id)
     t.control({releaseOthers:!e.shiftKey})
     
@@ -62,8 +64,8 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
       if (t.controlled) $(this).find('img').css('border', '1px solid orange')
       else $(this).find('img').css('border', '1px solid rgba(0,0,0,0)')
     });
-  })
-  .contextmenu(function(e){
+  },
+  contextmenu:function(e){
     let t = canvas.tokens.get(this.dataset.id)
     //if (!t.isOwner) return; 
     if ( canvas.tokens.hud.object === t) return canvas.tokens.hud.clear();
@@ -71,19 +73,34 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
         t.control({releaseOthers: !e.shiftKey});
         return canvas.tokens.hud.bind(t);
       }
-  })
-  .mouseover(function(e){
+  },
+  mouseover:function(e){
     let tok = canvas.tokens?.get($(this).data().id);
     let $div = $(`<div id="${tok.id}-marker" class="token-marker ${tok.id}" style="position: absolute; top: ${tok.y-2}px; left: ${tok.x-2}px; display:block;
     width: ${tok.w+4}px; height: ${tok.h+4}px;  border: 2px solid red; border-radius: 3px;" data-tokenid="${tok.id}"></div>`);
       $('#hud').append($div);
-  })
-  .mouseout(function(e) {
+  },
+  mouseout:function(e) {
     $('#hud').find('div.token-marker').remove();
-  });
-  $div.find('center').mouseleave(function(){$(this).remove();})
-  $(`#hud`).append($div);
+  }
+  });  
+  /*
+  $div.find('center').on({
+    mouseenter:function() {
+      console.log('center enter')
+      $(this).addClass('hover');
+   },
+    mouseleave: function() {
+      console.log('center leave')
+      $(this).removeClass('hover');
+   }
+  });*/
+  $(`#hud`).prepend($div);
+  //console.log($._data( $("a.token")[0], "events" ));
+  //console.log($div.find('a.token')[0].onclick)
+  //console.log($('a.token'))
 })
+
 
 Hooks.on('updateToken', (token, updates)=> {
   if (!updates.x && !updates.y) return;
