@@ -2,7 +2,7 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
   
   //console.log(!hover ,$(`#${token.id}-overlapping-div > center.hover`))
   //if (!hover && !$(`#${token.id}-overlapping-div > center.hover`).length) return $(`#hud > div.token-overlapping-div`).remove(); 
-  //??:hover
+  //??:hover 
   function doOverlap( l1, r1 ,  l2 ,  r2 ) {
     if (l1.x == r1.x || l1.y == r1.y || l2.x == r2.x || l2.y == r2.y)  return false;
     if (l1.x >= r2.x || l2.x >= r1.x) return false;
@@ -57,7 +57,7 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
     click:function(e){
     let t = canvas.tokens.get(this.dataset.id)
     t.control({releaseOthers:!e.shiftKey})
-    
+    Hooks.callAll('updateOverlapHUD', t, true)
     $(this).parent().find('a').each(function(){
       let t = canvas.tokens.get($(this).data().id)
       //if (!t.isOwner) return; 
@@ -77,7 +77,7 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
   mouseover:function(e){
     let tok = canvas.tokens?.get($(this).data().id);
     let $div = $(`<div id="${tok.id}-marker" class="token-marker ${tok.id}" style="position: absolute; top: ${tok.y-2}px; left: ${tok.x-2}px; display:block;
-    width: ${tok.w+4}px; height: ${tok.h+4}px;  border: 2px solid red; border-radius: 3px;" data-tokenid="${tok.id}"></div>`);
+    width: ${tok.w+4}px; height: ${tok.h+4}px;  border: 2px dashed white; border-radius: 3px;" data-tokenid="${tok.id}"></div>`);
       $('#hud').append($div);
   },
   mouseout:function(e) {
