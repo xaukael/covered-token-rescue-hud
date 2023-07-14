@@ -26,7 +26,7 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
   if (!covered.length) return $(`#hud > div.token-overlapping-div`).remove(); 
   if (hover) $(`div.token-overlapping-div`).remove(); 
   
-  let $div = $(`<div id="${token.id}-overlapping-div" class="token-overlapping-div ${token.id}" style="position: absolute; top: ${token.y+token.h}px; left: ${token.x}px; width: ${token.w}px; display:block; pointer-events:all;" data-tokenid="${token.id}">
+  let $div = $(`<div id="${token.id}-overlapping-div" class="token-overlapping-div ${token.id}" style="position: absolute; top: ${token.y+token.h}px; left: ${token.x}px; width: ${token.w}px; display:block; pointer-events:all;" data-tokenid="${token.id}" draggable="true">
   <style>
   .token-overlapping-div {
     font-size: ${canvas.grid.size/6}px;
@@ -48,7 +48,7 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
   } 
   </style></div>`);
   $div.append($(
-    covered.reduce((a,t)=>{
+    covered.sort((a,b) => (a.document.name > b.document.name) ? 1 : ((b.document.name > a.document.name) ? -1 : 0)).reduce((a,t)=>{
     if (t.document.texture.src.includes('.webm')) a+=`<a class="token" data-id="${t.id}" data-tooltip="${t.owner?t.name:''}" ><video width="${canvas.grid.size/3}" height="${canvas.grid.size/3}" ${t.controlled?'style="border: 1px solid orange;"':''}><source src="${t.document.texture.src}" type="video/webm"> </video></a>`
     else a+=`<a class="token" data-id="${t.id}" data-tooltip="${t.owner?t.name:''}" ><img src="${t.document.texture.src}" width="${canvas.grid.size/3}" height="${canvas.grid.size/3}" ${t.controlled?'style="border: 1px solid orange;"':''}></a>`
     return a;
