@@ -16,7 +16,7 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
   for (let t of canvas.tokens.placeables.filter(t=>t.visible)) {
     if (t.id==c.id) continue;
       let topLeft2 = { x: t.x , y: t.y };
-      let bottomRight2 = { x: t.x + t.w , y: t.y + t.w };
+      let bottomRight2 = { x: t.x + t.w , y: t.y + t.h };
       if (canvas.grid.type <= 1 && topLeft1.x <= topLeft2.x && topLeft1.y <= topLeft2.y && bottomRight1.x >= bottomRight2.x && bottomRight1.y >= bottomRight2.y && t.owner) 
         covered.push(t);
       if (canvas.grid.type > 1 && doOverlap(topLeft1, bottomRight1, topLeft2, bottomRight2))
