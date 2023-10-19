@@ -12,14 +12,22 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
   let c = token
   let topLeft1 = { x: c.x ,  y: c.y };
   let bottomRight1 = { x: c.x + c.w, y: c.y + c.h };
+  
+  let topLeft1_hex = { x: c.x + c.w * .3 , y: c.y + c.h * .3 };
+  let bottomRight1_hex = { x: c.x + c.w * .7 , y: c.y + c.h * .7};
+  
   let covered = [];
   for (let t of canvas.tokens.placeables.filter(t=>t.visible)) {
     if (t.id==c.id) continue;
       let topLeft2 = { x: t.x , y: t.y };
       let bottomRight2 = { x: t.x + t.w , y: t.y + t.h };
+    
+      let topLeft2_hex = { x: t.x + t.w * .3 , y: t.y + t.h * .3 };
+      let bottomRight2_hex = { x: t.x + t.w * .7 , y: t.y + t.h * .7};
+    
       if (canvas.grid.type <= 1 && topLeft1.x <= topLeft2.x && topLeft1.y <= topLeft2.y && bottomRight1.x >= bottomRight2.x && bottomRight1.y >= bottomRight2.y && t.owner) 
         covered.push(t);
-      if (canvas.grid.type > 1 && doOverlap(topLeft1, bottomRight1, topLeft2, bottomRight2))
+      if (canvas.grid.type > 1 && doOverlap(topLeft1_hex, bottomRight1_hex, topLeft2_hex, bottomRight2_hex))
         covered.push(t);
   }
   

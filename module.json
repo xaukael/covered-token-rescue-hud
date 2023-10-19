@@ -4,7 +4,7 @@
     "description": "On hovering a token with tokens under it, shows images of tokens to allow you to select them",
     "author": "Xaukael",
     "authors": [{"name":"Xaukael"}],
-    "version": "1.0.12",
+    "version": "1.1.0",
     "compatibility": {
         "minimum": "10",
         "verified": "11"
