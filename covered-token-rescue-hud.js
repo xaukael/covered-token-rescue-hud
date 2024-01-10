@@ -77,7 +77,12 @@ Hooks.on('updateOverlapHUD', async (token, hover)=>{
   },
   contextmenu:function(e){
     let t = canvas.tokens.get(this.dataset.id)
-    //if (!t.isOwner) return; 
+    if (!t.isOwner) {
+      let targets = [...game.user.targets].map(t=>t.id)
+      if (targets.includes(t.id)) targets.findSplice(i=>i==t.id)
+      else targets.push(t.id)
+      return game.user.updateTokenTargets(targets)
+    }
     if ( canvas.tokens.hud.object === t) return canvas.tokens.hud.clear();
       else {
         t.control({releaseOthers: !e.shiftKey});
