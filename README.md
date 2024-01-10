@@ -4,6 +4,9 @@ When hovering a token with another token completely covered by it, a small click
 
 ![demo](https://camo.githubusercontent.com/e7c35812ddd3ebe3e871a8718350e62185a631c033a868af06da77c845ac5d26/68747470733a2f2f692e696d6775722e636f6d2f31646f494f534f2e676966)
 
+1.2.0
+  - players can now right click unowned token hud elements to toggle targetting that token 
+
 1.0.11
   - covered tokens now sorted alphabetically
     
